@@ -1,76 +1,293 @@
-﻿Echo = TRUE
-#Loading the processing the data
+---
+title: "PA1_template.Rmd"
+output: html_document
+---
+
+#Load necessary packages
+
+
+```r
 library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.1.3
+```
+
+```r
 library(dplyr)
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.1.3
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 library(lubridate)
+```
+
+```
+## Warning: package 'lubridate' was built under R version 3.1.3
+```
+
+#Explore the data
+
+
+```r
 url <-"https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
 activity <- read.csv(unz("activity.zip", "activity.csv"), header=T, quote="\"", sep=",")
-dim(activity)
-str(activity)
-names(activity)
-summary(activity)
+```
 
+```
+## Warning in open.connection(file, "rt"): cannot open zip file 'activity.zip'
+```
+
+```
+## Error in open.connection(file, "rt"): cannot open the connection
+```
+
+```r
+dim(activity)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activity' not found
+```
+
+```r
+str(activity)
+```
+
+```
+## Error in str(activity): object 'activity' not found
+```
+
+```r
+names(activity)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activity' not found
+```
+
+```r
+summary(activity)
+```
+
+```
+## Error in summary(activity): object 'activity' not found
+```
 #Processing and Transforming the data
 
+
+```r
 nonaactivity <-na.omit(activity)
+```
+
+```
+## Error in na.omit(activity): object 'activity' not found
+```
+
+```r
 nonaactivity$date <- as.Date(nonaactivity$date)
+```
+
+```
+## Error in as.Date(nonaactivity$date): object 'nonaactivity' not found
+```
+
+```r
 str(nonaactivity)
+```
+
+```
+## Error in str(nonaactivity): object 'nonaactivity' not found
+```
 
 #Feature Engineering - adding the day column, month and year columns
 
+
+```r
 nonaactivity <- transform(nonaactivity, day = day(nonaactivity$date))
+```
+
+```
+## Error in transform(nonaactivity, day = day(nonaactivity$date)): object 'nonaactivity' not found
+```
+
+```r
 nonaactivity <- transform(nonaactivity, month = month(nonaactivity$date))                                        
+```
+
+```
+## Error in transform(nonaactivity, month = month(nonaactivity$date)): object 'nonaactivity' not found
+```
+
+```r
 nonaactivity <- transform(nonaactivity, year = year(nonaactivity$date))
+```
+
+```
+## Error in transform(nonaactivity, year = year(nonaactivity$date)): object 'nonaactivity' not found
+```
+
+```r
 View(nonaactivity[1:500,])
-For this part of the assignment, you can ignore the missing values in the dataset.
-1.	Calculate the total number of steps taken per day
-2.	Make a histogram of the total number of steps taken each day
-3.	Calculate and report the mean and median of the total number of steps taken per day
+```
+
+```
+## Error in View : object 'nonaactivity' not found
+```
+
+#Provide the sum of total steps as grouped by date
+
+
+```r
 totals <- nonaactivity %>%
          group_by(date) %>%
          summarize(totalsteps = sum(steps))
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'nonaactivity' not found
+```
 
 #Create the histogram showing the total number of steps per day
-hist(totals$totalsteps, xlab = "Total Steps per day", main = "Steps per Day", breaks = 10)
-
-#Calculate the mean and the media
-mean(totals$totalsteps) --
-The mean is 10766
-
-median(totals$totalsteps) -- 
-The median is 10765
-#What is the average daily activity pattern?
-1.	Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-2.	Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 
-intervalsteps <- ddply(nonaactivity, ~interval, summarize,mean=mean(steps))
+```
+## Error in ggplot(nonaactivity, aes(date, steps)): object 'nonaactivity' not found
+```
+
+#calculate the mean and the median
+
+
+```r
+mean(totals$totalsteps)
+```
+
+```
+## Error in mean(totals$totalsteps): object 'totals' not found
+```
+
+```r
+median(totals$totalsteps)
+```
+
+```
+## Error in median(totals$totalsteps): object 'totals' not found
+```
+
+# What is the average daily activity pattern?
+Calculate average steps for each of 5-minute interval during a 24-hour period.  
+Make a time series plot (i.e. type = “l”) of the 5-minute interval (x-axi) and the average number of steps taken, averaged across all days (y-axis)  
+Report which 5-minute interval, on average across all the days in the dataset contains the maximum number of steps?  
+Observer and comment the average daily activity pattern
+
+
+```r
+library(plyr)
+```
+
+```
+## Warning: package 'plyr' was built under R version 3.2.0
+```
+
+```
+## -------------------------------------------------------------------------
+## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)
+## -------------------------------------------------------------------------
+## 
+## Attaching package: 'plyr'
+## 
+## The following object is masked from 'package:lubridate':
+## 
+##     here
+## 
+## The following objects are masked from 'package:dplyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+```
+
+```r
+intervalsteps <- ddply(nonaactivity, ~ interval, summarize,mean=mean(steps))
+```
+
+```
+## Error in empty(.data): object 'nonaactivity' not found
+```
+
+```r
 qplot(x=interval, y=mean, data = intervalsteps,  geom = "line",
       xlab="Interval - 5 Minute",
       ylab="Step Count",
       main="Average Steps"
 )
+```
+
+```
+## Error in ggplot(data, aesthetics, environment = env): object 'intervalsteps' not found
+```
+
+#Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 
-intervalsteps[which.max(intervalsteps$mean), ] --
-The average activty pattern per interval: 104   835  206
+```r
+intervalsteps[which.max(intervalsteps$mean), ]
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'intervalsteps' not found
+```
+
+#Calculate and report the total number of missing values in the dataset
 
 
-#Imputing missing values
-Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
-1.	Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-2.	Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-3.	Create a new dataset that is equal to the original dataset but with the missing data filled in.
-4.	Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+```r
 activity_NA <- sum(is.na(activity))
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activity' not found
+```
+
+```r
 activity_NA
+```
 
-#Total number of missing values
-The total number of missing values is 2304
+```
+## Error in eval(expr, envir, enclos): object 'activity_NA' not found
+```
+
+#Imputing NAs
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
 
 
-#Histogram with imputed data
+```r
 newsteps <- aggregate(steps ~ interval, data = activity, FUN = mean)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activity' not found
+```
+
+```r
 imputdata <- numeric()
 for (i in 1:nrow(activity)) {
   obs <- activity[i, ]
@@ -81,44 +298,136 @@ for (i in 1:nrow(activity)) {
   }
   imputdata <- c(imputdata, steps)
 }
+```
 
+```
+## Error in nrow(activity): object 'activity' not found
+```
+
+```r
 imputactivity <- activity
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activity' not found
+```
+
+```r
 imputactivity$steps <- imputdata
+```
 
+```
+## Error in imputactivity$steps <- imputdata: object 'imputactivity' not found
+```
+
+```r
 imputsteps <- aggregate(steps ~ date, data = imputactivity, sum, na.rm = TRUE)
-hist(imputsteps$steps, main = "Steps Per day", xlab = "Day")
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'imputactivity' not found
+```
 
 
+```
+## Error in hist(imputsteps$steps, main = "Steps Per day", xlab = "Day"): object 'imputsteps' not found
+```
+
+
+```r
 mean(imputsteps$steps)
-The mean is 10766
+```
 
+```
+## Error in mean(imputsteps$steps): object 'imputsteps' not found
+```
+
+```r
 median(imputsteps$steps)
-The median is 10766
+```
 
-The  means are the same but the new median is slightly higher
-#Are there differences in activity patterns between weekdays and weekends?
-For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
-1.	Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
-2.	Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+```
+## Error in median(imputsteps$steps): object 'imputsteps' not found
+```
 
-head(weekenddata)
+#Are there differences in the weekdays vs weekends?
+
+
+```r
+weekenddata <- nonaactivity 
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'nonaactivity' not found
+```
+
+```r
 weekenddata$weekdays <- factor(format(weekenddata$date, "%A"))
+```
+
+```
+## Error in format(weekenddata$date, "%A"): object 'weekenddata' not found
+```
+
+```r
 levels(weekenddata$weekdays)
+```
+
+```
+## Error in levels(weekenddata$weekdays): object 'weekenddata' not found
+```
+
+```r
 levels(weekenddata$weekdays) <- list(weekday = c("Monday", "Tuesday",
-                                             "Wednesday", 
-                                             "Thursday", "Friday"),
-                                 weekend = c("Saturday", "Sunday"))
+                                                 "Wednesday", 
+                                                 "Thursday", "Friday"),
+                                     weekend = c("Saturday", "Sunday"))
+```
+
+```
+## Error in levels(weekenddata$weekdays) <- list(weekday = c("Monday", "Tuesday", : object 'weekenddata' not found
+```
+
+```r
 levels(weekenddata$weekdays)
+```
+
+```
+## Error in levels(weekenddata$weekdays): object 'weekenddata' not found
+```
+
+```r
 table(weekenddata$weekdays)
+```
 
+```
+## Error in table(weekenddata$weekdays): object 'weekenddata' not found
+```
+
+```r
 stepaverage <- aggregate(weekenddata$steps, 
-                      list(interval = as.numeric(as.character(weekenddata$interval)), 
-                           weekdays = weekenddata$weekdays),
-                      FUN = "mean")
-names(stepaverage)[3] <- "meanOfSteps"
-library(lattice)
-xyplot(stepaverage$meanOfSteps ~ stepaverage$interval | stepaverage$weekdays, 
-       layout = c(1, 2), type = "l", 
-       xlab = "Interval", ylab = "Number of steps")
+                         list(interval = as.numeric(as.character(weekenddata$interval)), 
+                              weekdays = weekenddata$weekdays),
+                         FUN = "mean")
+```
 
-Please see the graphs in the figure's folder to see a visual representation of the differences between weekday and weekend activity patterns
+```
+## Error in aggregate(weekenddata$steps, list(interval = as.numeric(as.character(weekenddata$interval)), : object 'weekenddata' not found
+```
+
+```r
+names(stepaverage)[3] <- "meanOfSteps"
+```
+
+```
+## Error in names(stepaverage)[3] <- "meanOfSteps": object 'stepaverage' not found
+```
+
+```r
+library(lattice)
+```
+
+
+```
+## Error in eval(expr, envir, enclos): object 'stepaverage' not found
+```
