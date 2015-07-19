@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title></title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<p>ï»¿echo = TRUE
+#Loading the processing the data
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+url &lt;-&ldquo;<a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip">https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip</a>&rdquo;
+activity &lt;- read.csv(unz(&ldquo;activity.zip&rdquo;, &ldquo;activity.csv&rdquo;), header=T, quote=&ldquo;\&rdquo;&ldquo;, sep=&rdquo;,&ldquo;)
+dim(activity)
+str(activity)
+names(activity)
+summary(activity)</p>
+
+<p>#Processing and Transforming the data
+nonaactivity &lt;-na.omit(activity)
+nonaactivity$date &lt;- as.Date(nonaactivity$date)
+str(nonaactivity)</p>
+
+<p>#Feature Engineering - adding the day column, month and year columns
+nonaactivity &lt;- transform(nonaactivity, day = day(nonaactivity$date))
+nonaactivity &lt;- transform(nonaactivity, month = month(nonaactivity$date))<br/>
+nonaactivity &lt;- transform(nonaactivity, year = year(nonaactivity$date))
+View(nonaactivity[1:500,])
+For this part of the assignment, you can ignore the missing values in the dataset.
+1.  Calculate the total number of steps taken per day
+2.  Make a histogram of the total number of steps taken each day
+3.  Calculate and report the mean and median of the total number of steps taken per day
+totals &lt;- nonaactivity %&gt;%
+         group_by(date) %&gt;%
+         summarize(totalsteps = sum(steps))</p>
+
+<p>#Create the histogram showing the total number of steps per day
+hist(totals$totalsteps, xlab = &quot;Total Steps per day&rdquo;, main = &ldquo;Steps per Day&rdquo;, breaks = 10)</p>
+
+<p>#Calculate the mean and the media
+mean(totals$totalsteps)
+10766</p>
+
+<p>median(totals$totalsteps)
+10765
+#What is the average daily activity pattern?
+1.  Make a time series plot (i.e. type = &ldquo;l&rdquo;) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+2.  Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?</p>
+
+<p>intervalsteps &lt;- ddply(nonaactivity, ~interval, summarize,mean=mean(steps))
+qplot(x=interval, y=mean, data = intervalsteps,  geom = &ldquo;line&rdquo;,
+      xlab=&ldquo;Interval - 5 Minute&rdquo;,
+      ylab=&ldquo;Step Count&rdquo;,
+      main=&ldquo;Average Steps&rdquo;
+)</p>
+
+<p>intervalsteps[which.max(intervalsteps$mean), ]
+Interval: 104   835  206</p>
+
+<p>#Imputing missing values
+Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+1.  Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+2.  Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+3.  Create a new dataset that is equal to the original dataset but with the missing data filled in.
+4.  Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+activity_NA &lt;- sum(is.na(activity))
+activity_NA</p>
+
+<p>#Total number of missing values
+2304</p>
+
+<p>#Histogram with imputed data
+newsteps &lt;- aggregate(steps ~ interval, data = activity, FUN = mean)
+imputdata &lt;- numeric()
+for (i in 1:nrow(activity)) {
+  obs &lt;- activity[i, ]
+  if (is.na(obs$steps)) {
+    steps &lt;- subset(newsteps, interval == obs$interval)$steps
+  } else {
+    steps &lt;- obs$steps
+  }
+  imputdata &lt;- c(imputdata, steps)
+}</p>
+
+<p>imputactivity &lt;- activity
+imputactivity$steps &lt;- imputdata</p>
+
+<p>imputsteps &lt;- aggregate(steps ~ date, data = imputactivity, sum, na.rm = TRUE)
+hist(imputsteps$steps, main = &ldquo;Steps Per day&rdquo;, xlab = &ldquo;Day&rdquo;)</p>
+
+<p>mean(imputsteps$steps)
+10766</p>
+
+<p>mean(imputsteps$steps)
+10766</p>
+
+<p>The  means are the same but the new median is slightly higher
+#Are there differences in activity patterns between weekdays and weekends?
+For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
+1.  Create a new factor variable in the dataset with two levels â€“ â€œweekdayâ€ and â€œweekendâ€ indicating whether a given date is a weekday or weekend day.
+2.  Make a panel plot containing a time series plot (i.e. type = &ldquo;l&rdquo;) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.</p>
+
+<p>head(weekenddata)
+weekenddata$weekdays &lt;- factor(format(weekenddata$date, &ldquo;%A&rdquo;))
+levels(weekenddata$weekdays)
+levels(weekenddata$weekdays) &lt;- list(weekday = c(&ldquo;Monday&rdquo;, &ldquo;Tuesday&rdquo;,
+                                             &ldquo;Wednesday&rdquo;, 
+                                             &ldquo;Thursday&rdquo;, &ldquo;Friday&rdquo;),
+                                 weekend = c(&ldquo;Saturday&rdquo;, &ldquo;Sunday&rdquo;))
+levels(weekenddata$weekdays)
+table(weekenddata$weekdays)</p>
+
+<p>stepaverage &lt;- aggregate(weekenddata$steps, 
+                      list(interval = as.numeric(as.character(weekenddata$interval)), 
+                           weekdays = weekenddata$weekdays),
+                      FUN = &ldquo;mean&rdquo;)
+names(stepaverage)[3] &lt;- &ldquo;meanOfSteps&rdquo;
+library(lattice)
+xyplot(stepaverage$meanOfSteps ~ stepaverage$interval | stepaverage$weekdays, 
+       layout = c(1, 2), type = &ldquo;l&rdquo;, 
+       xlab = &ldquo;Interval&rdquo;, ylab = &ldquo;Number of steps&rdquo;)</p>
+
+</body>
+
+</html>
