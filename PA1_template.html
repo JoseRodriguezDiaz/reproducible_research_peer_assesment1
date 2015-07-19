@@ -163,7 +163,7 @@ hr {
 </head>
 
 <body>
-<p>ï»¿echo = TRUE
+<p>ï»¿Echo = TRUE
 #Loading the processing the data
 library(ggplot2)
 library(dplyr)
@@ -175,13 +175,15 @@ str(activity)
 names(activity)
 summary(activity)</p>
 
-<p>#Processing and Transforming the data
-nonaactivity &lt;-na.omit(activity)
+<p>#Processing and Transforming the data</p>
+
+<p>nonaactivity &lt;-na.omit(activity)
 nonaactivity$date &lt;- as.Date(nonaactivity$date)
 str(nonaactivity)</p>
 
-<p>#Feature Engineering - adding the day column, month and year columns
-nonaactivity &lt;- transform(nonaactivity, day = day(nonaactivity$date))
+<p>#Feature Engineering - adding the day column, month and year columns</p>
+
+<p>nonaactivity &lt;- transform(nonaactivity, day = day(nonaactivity$date))
 nonaactivity &lt;- transform(nonaactivity, month = month(nonaactivity$date))<br/>
 nonaactivity &lt;- transform(nonaactivity, year = year(nonaactivity$date))
 View(nonaactivity[1:500,])
@@ -197,11 +199,11 @@ totals &lt;- nonaactivity %&gt;%
 hist(totals$totalsteps, xlab = &quot;Total Steps per day&rdquo;, main = &ldquo;Steps per Day&rdquo;, breaks = 10)</p>
 
 <p>#Calculate the mean and the media
-mean(totals$totalsteps)
-10766</p>
+mean(totals$totalsteps) &ndash;
+The mean is 10766</p>
 
-<p>median(totals$totalsteps)
-10765
+<p>median(totals$totalsteps) &ndash; 
+The median is 10765
 #What is the average daily activity pattern?
 1.  Make a time series plot (i.e. type = &ldquo;l&rdquo;) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 2.  Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?</p>
@@ -213,8 +215,8 @@ qplot(x=interval, y=mean, data = intervalsteps,  geom = &ldquo;line&rdquo;,
       main=&ldquo;Average Steps&rdquo;
 )</p>
 
-<p>intervalsteps[which.max(intervalsteps$mean), ]
-Interval: 104   835  206</p>
+<p>intervalsteps[which.max(intervalsteps$mean), ] &ndash;
+The average activty pattern per interval: 104   835  206</p>
 
 <p>#Imputing missing values
 Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
@@ -226,7 +228,7 @@ activity_NA &lt;- sum(is.na(activity))
 activity_NA</p>
 
 <p>#Total number of missing values
-2304</p>
+The total number of missing values is 2304</p>
 
 <p>#Histogram with imputed data
 newsteps &lt;- aggregate(steps ~ interval, data = activity, FUN = mean)
@@ -248,10 +250,10 @@ imputactivity$steps &lt;- imputdata</p>
 hist(imputsteps$steps, main = &ldquo;Steps Per day&rdquo;, xlab = &ldquo;Day&rdquo;)</p>
 
 <p>mean(imputsteps$steps)
-10766</p>
+The mean is 10766</p>
 
-<p>mean(imputsteps$steps)
-10766</p>
+<p>median(imputsteps$steps)
+The median is 10766</p>
 
 <p>The  means are the same but the new median is slightly higher
 #Are there differences in activity patterns between weekdays and weekends?
@@ -278,6 +280,8 @@ library(lattice)
 xyplot(stepaverage$meanOfSteps ~ stepaverage$interval | stepaverage$weekdays, 
        layout = c(1, 2), type = &ldquo;l&rdquo;, 
        xlab = &ldquo;Interval&rdquo;, ylab = &ldquo;Number of steps&rdquo;)</p>
+
+<p>Please see the graphs in the figure&#39;s folder to see a visual representation of the differences between weekday and weekend activity patterns</p>
 
 </body>
 

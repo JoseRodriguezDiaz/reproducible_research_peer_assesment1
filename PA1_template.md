@@ -1,4 +1,4 @@
-﻿echo = TRUE
+﻿Echo = TRUE
 #Loading the processing the data
 library(ggplot2)
 library(dplyr)
@@ -11,11 +11,13 @@ names(activity)
 summary(activity)
 
 #Processing and Transforming the data
+
 nonaactivity <-na.omit(activity)
 nonaactivity$date <- as.Date(nonaactivity$date)
 str(nonaactivity)
 
 #Feature Engineering - adding the day column, month and year columns
+
 nonaactivity <- transform(nonaactivity, day = day(nonaactivity$date))
 nonaactivity <- transform(nonaactivity, month = month(nonaactivity$date))                                        
 nonaactivity <- transform(nonaactivity, year = year(nonaactivity$date))
@@ -32,11 +34,11 @@ totals <- nonaactivity %>%
 hist(totals$totalsteps, xlab = "Total Steps per day", main = "Steps per Day", breaks = 10)
 
 #Calculate the mean and the media
-mean(totals$totalsteps)
-10766
+mean(totals$totalsteps) --
+The mean is 10766
 
-median(totals$totalsteps)
-10765
+median(totals$totalsteps) -- 
+The median is 10765
 #What is the average daily activity pattern?
 1.	Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 2.	Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
@@ -50,9 +52,8 @@ qplot(x=interval, y=mean, data = intervalsteps,  geom = "line",
 )
 
 
-intervalsteps[which.max(intervalsteps$mean), ]
-Interval: 104   835  206
-
+intervalsteps[which.max(intervalsteps$mean), ] --
+The average activty pattern per interval: 104   835  206
 
 
 #Imputing missing values
@@ -65,7 +66,7 @@ activity_NA <- sum(is.na(activity))
 activity_NA
 
 #Total number of missing values
-2304
+The total number of missing values is 2304
 
 
 #Histogram with imputed data
@@ -89,10 +90,10 @@ hist(imputsteps$steps, main = "Steps Per day", xlab = "Day")
 
 
 mean(imputsteps$steps)
-10766
+The mean is 10766
 
-mean(imputsteps$steps)
-10766
+median(imputsteps$steps)
+The median is 10766
 
 The  means are the same but the new median is slightly higher
 #Are there differences in activity patterns between weekdays and weekends?
@@ -120,4 +121,4 @@ xyplot(stepaverage$meanOfSteps ~ stepaverage$interval | stepaverage$weekdays,
        layout = c(1, 2), type = "l", 
        xlab = "Interval", ylab = "Number of steps")
 
-
+Please see the graphs in the figure's folder to see a visual representation of the differences between weekday and weekend activity patterns
