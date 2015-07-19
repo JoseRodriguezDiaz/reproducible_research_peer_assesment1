@@ -5,8 +5,7 @@ output: html_document
 
 #Load necessary packages
 
-```{r}
-echo = TRUE
+```{r, echo = TRUE}
 library(ggplot2)
 library(dplyr)
 library(lubridate)
@@ -54,7 +53,7 @@ totals <- nonaactivity %>%
 
 #Create the histogram showing the total number of steps per day
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 ggplot(nonaactivity, aes(date, steps)) + geom_bar(stat = "identity", colour = "black", fill = "black", width = 0.7) + facet_grid(. ~ month, scales = "free") + labs(title = "Total Number of Steps Each Day Per Month", x = "Date", y = "Total Steps")
 
 ```
